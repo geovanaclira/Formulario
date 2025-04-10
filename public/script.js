@@ -25,8 +25,10 @@ password.addEventListener("blur", () => {
 function checkInputUsername() {
     const usernameValue = username.value;
 
-    if (usernameValue.length < 3) {
-        errorInput(username, "O nome deve ter pelo menos 3 caracteres.")
+    if (usernameValue === "") {
+        errorInput(username, "O campo não pode ser nulo");
+    } else if (usernameValue.length < 3) {
+        errorInput(username, "O nome deve ter pelo menos 3 caracteres.");
     } else {
         const formItem = username.parentElement;
         formItem.className = "form-content";
@@ -38,7 +40,9 @@ function checkInputEmail() {
     const emailValue = email.value;
     const regexEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
-    if (!regexEmail.test(emailValue)) {
+    if (emailValue === "") {
+        errorInput(email, "O campo não pode ser nulo")
+    } else if (!regexEmail.test(emailValue)) {
         errorInput(email, "Digite um e-mail válido.");
     } else {
         const formItem = email.parentElement;
@@ -50,7 +54,9 @@ function checkInputPassorwd() {
     const passwordValue = password.value;
     const regexSenha = /^(?=.*[A-Z])(?=.*\d).{8,}$/;
 
-    if(!regexSenha.test(passwordValue)) {
+    if (passwordValue === "") {
+        errorInput(password, "O campo não pode ser nulo");
+    } else if (!regexSenha.test(passwordValue)) {
         errorInput(password, "A senha deve ter no mínimo 8 caracteres, incluindo uma letra maiúscula e um número.");
     } else {
         const formItem = password.parentElement;
