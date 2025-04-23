@@ -1,11 +1,13 @@
+document.addEventListener("DOMContentLoaded", () => {
+
 const form = document.getElementById("form");
 const username = document.getElementById("username");
 const email = document.getElementById("email");
 const password = document.getElementById("password");
+const role = document.getElementById("role");
 
 form.addEventListener("submit", (event) => {
     event.preventDefault();
-
     checkForm();
 })
 
@@ -18,9 +20,12 @@ email.addEventListener("blur", () => {
 })
 
 password.addEventListener("blur", () => {
-    checkInputPassorwd();
+    checkInputPassword();
 })
 
+role.addEventListener("blur", () => {
+    checkInputRole();
+});
 
 function checkInputUsername() {
     const usernameValue = username.value;
@@ -30,8 +35,7 @@ function checkInputUsername() {
     } else if (usernameValue.length < 3) {
         errorInput(username, "O nome deve ter pelo menos 3 caracteres.");
     } else {
-        const formItem = username.parentElement;
-        formItem.className = "form-content";
+        clearError(username);
     }
     
 }
@@ -45,12 +49,11 @@ function checkInputEmail() {
     } else if (!regexEmail.test(emailValue)) {
         errorInput(email, "Digite um e-mail válido.");
     } else {
-        const formItem = email.parentElement;
-        formItem.className = "form-content";
+        clearError(email);
     }
 }
 
-function checkInputPassorwd() {
+function checkInputPassword() {
     const passwordValue = password.value;
     const regexSenha = /^(?=.*[A-Z])(?=.*\d).{8,}$/;
 
@@ -59,27 +62,39 @@ function checkInputPassorwd() {
     } else if (!regexSenha.test(passwordValue)) {
         errorInput(password, "A senha deve ter no mínimo 8 caracteres, incluindo uma letra maiúscula e um número.");
     } else {
-        const formItem = password.parentElement;
-        formItem.className = "form-content";
+        clearError(password);
+    }
+}
+
+function checkInputRole() {
+    const roleValue = role.value;
+    const validRoles = ["usuario", "admin"];
+
+    if (!validRoles.includes(roleValue)) {
+        errorInput(role, "Função inválida.");
+    } else {
+        clearError(role);
     }
 }
 
 function checkForm() {
     checkInputUsername();
     checkInputEmail();
-    checkInputPassorwd();
+    checkInputPassword();
+    checkInputRole();
 
     const formItems = form.querySelectorAll(".form-content");
 
     const isValid = [...formItems].every((item) => {
-        return item.className === "form-content"
+        return !item.classList.contains("error");
     });
 
     if (isValid) {
         const data = {
             username: username.value,
             email: email.value,
-            password: password.value
+            password: password.value,
+            role: role.value
         };
 
         fetch("http://localhost:3000/submit", {
@@ -90,27 +105,36 @@ function checkForm() {
             body: JSON.stringify(data)
         })
         .then(async (res) => {
-            const resposta = await res.json();
-            if (res.status === 200) {
+            const contentType = res.headers.get("content-type");
+            const isJson = contentType && contentType.includes("application/json");
+        
+            const resposta = isJson ? await res.json() : await res.text();
+        
+            if (res.status === 200 && isJson) {
                 alert(resposta.message);
-                form.reset(); // limpa os campos
+                form.reset();
             } else {
-                alert("Erro: " + resposta.message);
+                alert("Erro: " + (isJson ? resposta.message : resposta));
             }
         })
         .catch((err) => {
             alert("Erro ao enviar formulário: " + err.message);
         });
     }
-
 }
 
 function errorInput(input, message) {
     const formItem = input.parentElement;
     const textMessage = formItem.querySelector("a");
-
     textMessage.innerText = message;
-
-    formItem.className = "form-content error"
+    formItem.classList.add("error");
 }
 
+function clearError(input) {
+    const formItem = input.parentElement;
+    formItem.classList.remove("error");
+    const textMessage = formItem.querySelector("a");
+    textMessage.innerText = "";
+}
+
+});

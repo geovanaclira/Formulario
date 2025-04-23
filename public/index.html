@@ -17,10 +17,20 @@
 
     <form id="form" class="form">
         <div class="form-content">
+            <label for="role">Função</label>
+            <select id="role" name="role">
+                <option value="usuario">Usuário</option>
+                <option value="admin">Administrador</option>
+            </select>
+            <a>Aqui vai a mensagem de erro</a>
+        </div>
+
+        <div class="form-content">
             <label for="username">Usuário</label>
             <input 
             type="text" 
             id="username"
+            name="username"
             placeholder="Digite o nome"
             />
             <a>Aqui vai a mensagem de erro</a>
@@ -31,6 +41,7 @@
             <input 
             type="email" 
             id="email"
+            name="email"
             placeholder="Digite o email"
             />
             <a>Aqui vai a mensagem de erro</a>
@@ -41,6 +52,7 @@
             <input 
             type="password" 
             id="password"
+            name="password"
             placeholder="Digite a senha"
             />
             <a>Aqui vai a mensagem de erro</a>
