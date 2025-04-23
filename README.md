@@ -9,6 +9,9 @@ Este projeto é uma aplicação simples de formulário que demonstra como realiz
   - Email: deve ser um formato válido de email.
   - Senha: no mínimo 8 caracteres, contendo pelo menos uma letra maiúscula e um número.
 - Sanitização dos dados no back-end (usando a biblioteca `validator`) para evitar ataques (XSS, injeção de código).
+- Autorização com:
+  - **RBAC**: baseado em função (admin ou usuario)
+  - **ABAC**: baseado em atributos (ex: e-mail e nome)
 - Validação adicional no back-end com respostas JSON para informar sucesso ou erro.
 - Feedback visual inline: mensagens de erro são exibidas abaixo dos campos com problemas.
 
@@ -29,11 +32,13 @@ Este projeto é uma aplicação simples de formulário que demonstra como realiz
 ```plaintext
 formulario-node/
 ├── public/
-│   ├── index.html       # Página principal com o formulário
-│   ├── style.css        # Estilos do formulário e feedback visual
-│   └── script.js        # Validação dos campos e envio via fetch()
-├── server.js            # Servidor Express que recebe e valida os dados do formulário
-└── package.json         # Informações do projeto e dependências
+│   ├── index.html       # HTML do formulário
+│   ├── style.css        # Estilo da página
+│   └── script.js        # Validações e envio via fetch
+├── server.js            # Back-end com validação e autorização
+├── Dockerfile           # Configuração do container
+├── .dockerignore        # Ignora arquivos desnecessários no Docker
+├── package.json         # Dependências do projeto
 ```
 
 ## Instalação e Execução
@@ -57,6 +62,25 @@ Abra o navegador e acesse:
 http://localhost:3000
 ```
 
+## 🔐 Autorização Implementada
+
+### RBAC – Role-Based Access Control
+
+Controle baseado no valor selecionado no campo `role`:
+- `admin`
+- `usuario`
+
+### ABAC – Attribute-Based Access Control
+
+Regras adicionais para `admin`:
+- O e-mail deve terminar com `@empresa.com`
+- O nome deve ter pelo menos 5 caracteres
+
+**Exemplo de rejeição:**
+- `admin` com email pessoal → ❌
+- `admin` com nome "Ana" → ❌
+
+---
 
 
 
