@@ -1,8 +1,7 @@
-# Formulário 
+# 📝 Formulário com Validação, Autorização e Docker
+Este projeto é uma aplicação Node.js + JavaScript que implementa um formulário com validação de campos, controle de autorização (RBAC + ABAC) e empacotamento via Docker. Foi feito para fins educacionais e simula um fluxo básico de cadastro/autenticação com controle de acesso. 
 
-Este projeto é uma aplicação simples de formulário que demonstra como realizar validação dos campos tanto no front-end quanto no back-end. 
-
-## Funcionalidades
+## ✅ Funcionalidades
 
 - Validação dos campos no front-end:
   - Nome: deve ter no mínimo 3 caracteres.
@@ -14,6 +13,7 @@ Este projeto é uma aplicação simples de formulário que demonstra como realiz
   - **ABAC**: baseado em atributos (ex: e-mail e nome)
 - Validação adicional no back-end com respostas JSON para informar sucesso ou erro.
 - Feedback visual inline: mensagens de erro são exibidas abaixo dos campos com problemas.
+- Dockerfile para empacotar toda a aplicação
 
 ## Tecnologias Utilizadas
 
@@ -27,7 +27,7 @@ Este projeto é uma aplicação simples de formulário que demonstra como realiz
   - body-parser
   - validator
 
-## Estrutura do Projeto
+## 📁Estrutura do Projeto
 
 ```plaintext
 formulario-node/
@@ -41,7 +41,7 @@ formulario-node/
 ├── package.json         # Dependências do projeto
 ```
 
-## Instalação e Execução
+## 🧪 Teste Local (sem Docker)
 
 1. Clone o Repositório
 ```bash
@@ -81,6 +81,39 @@ Regras adicionais para `admin`:
 - `admin` com nome "Ana" → ❌
 
 ---
+
+## 🐳 Rodando com Docker
+1. Build da imagem
+ ```bash
+docker build -t formulario-node .
+```
+2. Executar o container
+```bash
+docker run -p 3000:3000 formulario-node
+```
+3. Acesse no navegador:
+```bash
+http://localhost:3000
+```
+## 🔧 Dockerfile usado
+```bash
+FROM node:18
+WORKDIR /app
+COPY package*.json ./
+COPY . .
+RUN npm install
+EXPOSE 3000
+CMD ["node", "server.js"]
+```
+## 🧼 .dockerignore usado
+```bash
+node_modules
+npm-debug.log
+Dockerfile
+.dockerignore
+```
+
+
 
 
 
